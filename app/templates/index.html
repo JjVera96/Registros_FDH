@@ -26,8 +26,8 @@
 	</tr>
 </table>	
 
-<button type="submit" class="btn btn-primary ">Agregar Entrega</button>
-<button type="submit" class="btn btn-primary ">Listar Entregas</button>
+<a href="{% url 'agregar_entrega' paciente.id %}"><button type="submit" class="btn btn-primary ">Agregar Entrega</button></a>
+<a href="{% url 'listar_entregas_user' paciente.id %}"><button type="submit" class="btn btn-primary ">Listar Entregas</button></a>
 {% endif %}
 {% if flag_no_exists %}
 <br>

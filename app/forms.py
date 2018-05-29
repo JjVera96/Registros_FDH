@@ -16,4 +16,4 @@ class Paciente_Form(forms.ModelForm):
 class Entrega_Form(forms.ModelForm):
 	class Meta:
 		model = Entrega
-		fields = ['paciente', 'id']
+		fields = ['paciente', 'id', 'descripcion']

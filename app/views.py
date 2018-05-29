@@ -94,8 +94,6 @@ def agregar_paciente(request, id_paciente):
 	else:
 		return HttpResponseRedirect("sign_in")
 
-
-
 def agregar_entrega(request, id_paciente):
 	if request.user.is_authenticated:
 		entrega_form = Entrega_Form(request.POST or None)
@@ -106,7 +104,8 @@ def agregar_entrega(request, id_paciente):
 			paciente = form_data.get('paciente')
 			despacho = request.user
 			descripcion = form_data.get('descripcion')
-			entrega = Entrega.objects.create(id=id, despacho=despacho)
+			print(descripcion)
+			entrega = Entrega.objects.create(id=id, despacho=despacho, descripcion=descripcion)
 			entrega.paciente.add(paciente[0])
 			msg = 'Entrega registrada correctamente'
 			print(entrega.fecha)
@@ -117,5 +116,50 @@ def agregar_entrega(request, id_paciente):
 			'msg' : msg,
 		}
 		return render(request, 'agregar_entrega.html', context)
+	else:
+		return HttpResponseRedirect("sign_in")
+
+def listar_entregas(request):
+	if request.user.is_authenticated:
+		paciente_form = Paciente_Form(request.POST or None)
+		msg = ''
+		mode = False
+		entregas = Entrega.objects.all()
+
+		print(entregas)
+		if not len(entregas):
+			msg = "No hay Mesas para listar"
+		else:
+			mode = True
+		
+		context = {
+			'msg' : msg,
+			'mode' : mode,
+			'entregas' : entregas
+		}
+		return render(request, 'listar_entregas.html', context)
+	else:
+		return HttpResponseRedirect("sign_in")
+
+def listar_entregas_user(request, id_paciente):
+	if request.user.is_authenticated:
+		paciente_form = Paciente_Form(request.POST or None)
+		msg = ''
+		mode = False
+		entregas = Entrega.objects.all().filter(paciente=id_paciente)
+
+		print(entregas)
+		if not len(entregas):
+			msg = "No hay Mesas para listar"
+		else:
+			mode = True
+		
+		context = {
+			'msg' : msg,
+			'mode' : mode,
+			'entregas' : entregas,
+			'id_paciente' : id_paciente
+		}
+		return render(request, 'listar_entregas.html', context)
 	else:
 		return HttpResponseRedirect("sign_in")
