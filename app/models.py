@@ -18,12 +18,3 @@ class Entrega(models.Model):
 
 	def __str__(self):
 		return str(self.id)
-
-class Medicamento(models.Model):
-	id = models.AutoField(primary_key=True)
-	entrega = models.ForeignKey(Entrega, on_delete=models.DO_NOTHING)
-	nombre = models.CharField(max_length=50)
-	cantidad = models.IntegerField()
-
-	def __str__(self):
-		return str(self.id)
