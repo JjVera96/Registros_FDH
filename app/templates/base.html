@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Registros de la Drogueria Hospitalaria para entrega de Medicamentos">
+    <meta name="author" content="JV">
+
+    <title>Registros Hospitalaria | {% block head_title%}Inicio{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/2-col-portfolio.css' %}" rel="stylesheet">
+    {% block scripts %}
+    {% endblock %}
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">Registros</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+            {% block active_inicio %}<li class="nav-item">{% endblock %}
+              <a class="nav-link" href="{% url 'index' %}">Home
+              </a>
+            </li>
+            {% block active_listar %}<li class="nav-item">{% endblock %}
+              <a class="nav-link" href="#">Listar</a>
+            </li>
+            {% if user.is_staff %}
+            <li class="nav-item">
+              <a class="nav-link" href="#">Empleados</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'sign_out' %}">Cerrar Sesion</a>
+            </li>
+            {% else %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'sign_in' %}">Iniciar Sesion</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- Page Heading -->
+      <h1 class="my-4">Registros Hospitalaria
+        <small>{% block title_page %}Inicio{% endblock %}</small>
+      </h1>
+      {% block container %}
+      {% endblock %}
+
+    </div>
+    <!-- /.container -->
+    <br>
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-right text-white">Copyright &copy;<br>Droguerias Farmacenter Hospitalaria 2018<br>Maria Rocio Gomez Galviz</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  </body>
+
+</html>

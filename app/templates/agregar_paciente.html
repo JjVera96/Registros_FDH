@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_title%}Agregar Paciente{% endblock %}
+{% block active_inicio %}<li class="nav-item active">{% endblock %}
+{% block title_page %}Agregar Paciente{% endblock %}
+{% block container %}
+<form method="POST"> {% csrf_token %} 
+	<label>Cedula Paciente</label>
+  	<input type="text" id="id" name="id" value="{{id_paciente}}" class="form-control col-lg-3" required>
+  	<label>Nombres</label>
+  	<input type="text" id="nombres" name="nombres" class="form-control col-lg-3" required>
+  	<label>Apellidos</label>
+  	<input type="text" id="apellidos" name="apellidos" class="form-control col-lg-3" required>
+ 	<br><button type="submit" class="btn btn-primary ">Agregar</button>
+</form>
+{% endblock %}

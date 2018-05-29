@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_title%}Agregar Entrega{% endblock %}
+{% block active_inicio %}<li class="nav-item active">{% endblock %}
+{% block title_page %}Agregar Entrega{% endblock %}
+{% block container %}
+{{ msg }}
+{% if entrega_form %}
+<form method="POST"> {% csrf_token %} 
+	<label>Cedula Paciente</label>
+  	<input type="text" id="paciente" name="paciente" value="{{id_paciente}}" class="form-control col-lg-3" required>
+  	<label>Numero de solicitud</label>
+  	<input type="text" id="id" name="id" class="form-control col-lg-3" required>
+  	<label>Medicamentos</label><br>
+    <textarea name="descripcion" placeholder="Descripcion de los medicamentos de la entrega" class="form-control col-lg-6"></textarea>
+    <br><button type="submit" class="btn btn-primary ">Agregar</button>
+</form>
+{% endif %}
+{% endblock %}

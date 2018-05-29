@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_title%}Registro{% endblock %}
+{% block active_inicio %}<li class="nav-item active">{% endblock %}
+{% block title_page %}Registro{% endblock %}
+
+{% block container %}
+<form method="POST"> {% csrf_token %} 
+	<label>Cedula Paciente</label>
+  	<input type="text" id="id" name="id" class="form-control col-lg-3" required>
+ 	<br><button type="submit" class="btn btn-primary ">Buscar</button>
+</form>
+
+{% if flag_exists %}
+<br>
+<table style="width:100%" class="table table-striped table-dark table-hover">
+	<tr>
+	    <th>ID</th>
+	    <th>Nombres</th> 
+	    <th>Apellidos</th>
+	</tr>
+	<tr>
+	    <td>{{paciente.id}}</td>
+	    <td>{{paciente.nombres}} </td> 
+	    <td>{{paciente.apellidos}}</td>
+	</tr>
+</table>	
+
+<button type="submit" class="btn btn-primary ">Agregar Entrega</button>
+<button type="submit" class="btn btn-primary ">Listar Entregas</button>
+{% endif %}
+{% if flag_no_exists %}
+<br>
+<h3 class="text-danger">{{msg}}</h3>
+<a href="{% url 'agregar_paciente' id %}"><button type="submit" class="btn btn-primary ">Agregar Paciente</button></a>
+{% endif %}
+{% endblock %}

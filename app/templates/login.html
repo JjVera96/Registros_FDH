@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_title%}Inicio Sesión{% endblock %}
+{% block title_page %}Inicio Sesión{% endblock %}
+{% block container %}
+<form method="POST"> {% csrf_token %} 
+	<label>Usuario</label>
+	<input type="text" id="username" name="username" class="form-control col-lg-3" required>
+	<label>Contraseña</label>
+	<input type="password" id="password" name="password" class="form-control col-lg-3" required>
+	<label class="text-danger">{{msg}}</label>
+	<br><button type="submit" class="btn btn-primary ">Ingresar</button>
+</form>
+{% endblock %}
