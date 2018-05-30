@@ -125,9 +125,8 @@ def listar_entregas(request):
 		mode = False
 		entregas = Entrega.objects.all()
 
-		print(entregas)
 		if not len(entregas):
-			msg = "No hay Mesas para listar"
+			msg = "No hay Entregas para mostrar"
 		else:
 			mode = True
 		
@@ -146,7 +145,7 @@ def listar_entregas_user(request, id_paciente):
 		mode = False
 		entregas = Entrega.objects.all().filter(paciente=id_paciente)
 		if not len(entregas):
-			msg = "No hay Entragas para mostrar"
+			msg = "No hay Entregas para mostrar"
 		else:
 			mode = True
 		
@@ -163,7 +162,7 @@ def listar_entregas_user(request, id_paciente):
 def buscar_entrega(request):
 	if request.user.is_authenticated:
 		buscar_form = Buscar_Form(request.POST or None)
-		entregas = None
+		entregas = []
 		mode = False
 		msg = ''
 		id_paciente = None
@@ -180,7 +179,7 @@ def buscar_entrega(request):
 			elif id_entrega:
 				entregas = Entrega.objects.all().filter(id=id_entrega)
 
-			if entregas == None:
+			if not len(entregas):
 				msg = "No hay Entregas para mostrar"
 			else:
 				mode = True
