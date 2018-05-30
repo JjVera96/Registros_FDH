@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout, models
-from .forms import Login_Form, Id_Paciente_Form, Paciente_Form, Entrega_Form
+from .forms import Login_Form, Id_Paciente_Form, Paciente_Form, Entrega_Form, Buscar_Form
 from .models import Paciente, Entrega
 from django.forms import formset_factory
 
@@ -121,7 +121,6 @@ def agregar_entrega(request, id_paciente):
 
 def listar_entregas(request):
 	if request.user.is_authenticated:
-		paciente_form = Paciente_Form(request.POST or None)
 		msg = ''
 		mode = False
 		entregas = Entrega.objects.all()
@@ -143,14 +142,11 @@ def listar_entregas(request):
 
 def listar_entregas_user(request, id_paciente):
 	if request.user.is_authenticated:
-		paciente_form = Paciente_Form(request.POST or None)
 		msg = ''
 		mode = False
 		entregas = Entrega.objects.all().filter(paciente=id_paciente)
-
-		print(entregas)
 		if not len(entregas):
-			msg = "No hay Mesas para listar"
+			msg = "No hay Entragas para mostrar"
 		else:
 			mode = True
 		
@@ -161,5 +157,49 @@ def listar_entregas_user(request, id_paciente):
 			'id_paciente' : id_paciente
 		}
 		return render(request, 'listar_entregas.html', context)
+	else:
+		return HttpResponseRedirect("sign_in")
+
+def buscar_entrega(request):
+	if request.user.is_authenticated:
+		buscar_form = Buscar_Form(request.POST or None)
+		entregas = None
+		mode = False
+		msg = ''
+		id_paciente = None
+
+		if buscar_form.is_valid():
+			form_data = buscar_form.cleaned_data
+			id_paciente = form_data.get('id_paciente')
+			id_entrega = form_data.get('id_entrega')
+
+			if id_paciente and id_entrega:
+				entregas = Entrega.objects.all().filter(paciente=id_paciente, id=id_entrega)
+			elif id_paciente:
+				entregas = Entrega.objects.all().filter(paciente=id_paciente)
+			elif id_entrega:
+				entregas = Entrega.objects.all().filter(id=id_entrega)
+
+			if entregas == None:
+				msg = "No hay Entregas para mostrar"
+			else:
+				mode = True
+
+		context = {
+			'buscar_form' : buscar_form,
+			'entregas': entregas,
+			'msg' : msg,
+			'mode' : mode,
+			'id_paciente' : id_paciente
+		}
+		return render(request, 'buscar_entrega.html', context)
+	else:
+		return HttpResponseRedirect("sign_in")
+
+def empleados(request):
+	if request.user.is_authenticated:
+		context = {
+		}
+		return render(request, 'empleados.html', context)
 	else:
 		return HttpResponseRedirect("sign_in")

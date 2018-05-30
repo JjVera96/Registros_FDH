@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_title%}Buscar Entrega{% endblock %}
+{% block active_buscar %}<li class="nav-item active">{% endblock %}
+{% block title_page %}Buscar Entrega{% endblock %}
+{% block container %}
+<form method="POST"> {% csrf_token %} 
+	<div class="row">
+		<div class="col-lg-3">
+		<label>Cedula Paciente</label>
+  		<input type="text" name="id_paciente" class="form-control">
+  		</div>
+  		<div class="col-lg-3">
+  		<label>Codigo Entrega</label>
+  		<input type="text" name="id_entrega" class="form-control">	
+  		</div>
+ 	<br><button type="submit" class="btn btn-primary ">Buscar</button>
+</div>
+</form>
+{{msg}}
+<br>
+{% if mode %}
+<table style="width:100%" class="table table-striped table-dark table-hover">
+  	<tr>
+	    <th>Id</th>
+	    <th>Paciente</th> 
+	    <th>Fecha</th>
+	    <th>Despacho</th>
+	    <th>Descripcion</th>
+  	</tr>
+{% for entrega in entregas %}
+	<tr>
+	    <td>{{entrega.id}}</td>
+	    <td>{{id_paciente}} </td> 
+	    <td>{{entrega.fecha}}</td>
+	    <td>{{entrega.despacho}}</td>
+	    <td>{{entrega.descripcion}}</td>
+		</tr>
+	{% endfor %}
+	</table>	
+{% endif %}
+{% endblock %}

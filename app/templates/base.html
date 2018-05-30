@@ -40,11 +40,11 @@
               <a class="nav-link" href="{% url 'listar_entregas' %}">Listar</a>
             </li>
             {% block active_buscar %}<li class="nav-item">{% endblock %}
-              <a class="nav-link" href="#">Buscar</a>
+              <a class="nav-link" href="{% url 'buscar_entrega' %}">Buscar</a>
             </li>
             {% if user.is_staff %}
-            <li class="nav-item">
-              <a class="nav-link" href="#">Empleados</a>
+            {% block active_empleado %}<li class="nav-item">{% endblock %}
+              <a class="nav-link" href="{% url 'empleados' %}">Empleados</a>
             </li>
             {% endif %}
             <li class="nav-item">

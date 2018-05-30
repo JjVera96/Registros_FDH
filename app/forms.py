@@ -17,3 +17,8 @@ class Entrega_Form(forms.ModelForm):
 	class Meta:
 		model = Entrega
 		fields = ['paciente', 'id', 'descripcion']
+
+class Buscar_Form(forms.Form):
+	id_paciente = forms.CharField(max_length=50, required=False)
+	id_entrega = forms.CharField(max_length=50, required=False)
+
