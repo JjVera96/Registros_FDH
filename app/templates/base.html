@@ -42,11 +42,9 @@
             {% block active_buscar %}<li class="nav-item">{% endblock %}
               <a class="nav-link" href="{% url 'buscar_entrega' %}">Buscar</a>
             </li>
-            {% if user.is_staff %}
-            {% block active_empleado %}<li class="nav-item">{% endblock %}
-              <a class="nav-link" href="{% url 'empleados' %}">Empleados</a>
+            {% block active_cuenta %}<li class="nav-item">{% endblock %}
+              <a class="nav-link" href="{% url 'cuenta' %}">Cuenta</a>
             </li>
-            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'sign_out' %}">Cerrar Sesion</a>
             </li>

@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout, models
-from .forms import Login_Form, Id_Paciente_Form, Paciente_Form, Entrega_Form, Buscar_Form
+from .forms import Login_Form, Id_Paciente_Form, Paciente_Form, Entrega_Form, Buscar_Form, Change_Form, User_Form, Edit_User_Form
+from django.contrib.auth.hashers import make_password
 from .models import Paciente, Entrega
 from django.forms import formset_factory
 
@@ -104,11 +105,9 @@ def agregar_entrega(request, id_paciente):
 			paciente = form_data.get('paciente')
 			despacho = request.user
 			descripcion = form_data.get('descripcion')
-			print(descripcion)
 			entrega = Entrega.objects.create(id=id, despacho=despacho, descripcion=descripcion)
 			entrega.paciente.add(paciente[0])
 			msg = 'Entrega registrada correctamente'
-			print(entrega.fecha)
 			
 		context = {
 			'entrega_form' : entrega_form,
@@ -195,10 +194,104 @@ def buscar_entrega(request):
 	else:
 		return HttpResponseRedirect("sign_in")
 
-def empleados(request):
+def cuenta(request):
 	if request.user.is_authenticated:
 		context = {
 		}
+		return render(request, 'cuenta.html', context)
+	else:
+		return HttpResponseRedirect("sign_in")
+
+def cambiar_contrasena(request, id_user):
+	if request.user.is_authenticated:
+		if request.user.id == id_user or request.user.is_staff:
+			user = models.User.objects.get(id=id_user)
+			change_form = Change_Form(request.POST or None)
+			msg = ''
+			
+			if change_form.is_valid():
+				form_data = change_form.cleaned_data
+				password = form_data.get('password')
+				again = form_data.get('again')
+				if password == again:
+					user.password = make_password(password, salt=None, hasher='default')
+					user.save()
+					msg = "Contraseña Cambiada correctamente"
+				else:
+					msg = "Contraseña no Coinciden"
+			context = {
+				'change_form': change_form,
+				'msg' : msg,
+				'p_user' : user
+
+			}
+			return render(request, 'cambiar_contrasena.html', context)
+		else:
+			return HttpResponseRedirect("sign_in")
+	else:
+		return HttpResponseRedirect("sign_in")
+
+def empleados(request):
+	if request.user.is_authenticated and request.user.is_staff:
+		msg = ''
+		mode = False
+		empleados = models.User.objects.all()
+		if not len(empleados):
+			msg = "No hay empleados para mostrar"
+		else:
+			mode = True
+		
+		context = {
+			'msg' : msg,
+			'mode' : mode,
+			'empleados' : empleados
+		}
 		return render(request, 'empleados.html', context)
+	else:
+		return HttpResponseRedirect("sign_in")
+
+def crear_empleado(request):
+	if request.user.is_authenticated and request.user.is_staff:
+
+		user_form = User_Form(request.POST or None)
+		msg = ''
+		if user_form.is_valid():
+			form_data = user_form.cleaned_data
+			username = form_data.get('username')
+			first_name = form_data.get('first_name')
+			last_name = form_data.get('last_name')
+			password = form_data.get('password')
+			user = models.User.objects.create_user(username, first_name=first_name, last_name=last_name, password=password)
+			msg = 'Empleado registrado correctamente'
+			
+		context = {
+			'user_form' : user_form,
+			'msg' : msg,
+		}
+
+		return render(request, 'crear_empleado.html', context)
+	else:
+		return HttpResponseRedirect("sign_in")
+
+def editar_empleado(request, id_user):
+	if request.user.is_authenticated and request.user.is_staff:
+	
+		e_user = models.User.objects.get(id=id_user)
+		edit_user_form = Edit_User_Form(request.POST or None, instance=e_user)
+		if edit_user_form.is_valid():
+			form_data = edit_user_form.cleaned_data
+			e_user.username = form_data.get('username')
+			e_user.first_name = form_data.get('first_name')
+			e_user.last_name = form_data.get('last_name')
+			e_user.active = form_data.get('is_active')
+			e_user.save()
+			url = '/editar_empleado/{}'.format(id_user)
+			return HttpResponseRedirect(url)
+
+		context = {
+			'e_user' : e_user
+		}
+
+		return render(request, 'editar_empleado.html', context)
 	else:
 		return HttpResponseRedirect("sign_in")

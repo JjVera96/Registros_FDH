@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_title%}Gestión de la Cuenta{% endblock %}
+{% block active_cuenta %}<li class="nav-item active">{% endblock %}
+{% block title_page %}Gestión de la Cuenta{% endblock %}
+{% block container %}
+{{msg}}
+<form method="POST"> {% csrf_token %} 
+     <label>Usuario</label>
+     <input type="text" id="username" name="username" value="{{e_user.username}}" class="form-control col-lg-3" required>
+     <label>Nombres</label>
+     <input type="text" id="first_name" name="first_name" value="{{e_user.first_name}}" class="form-control col-lg-3" required>
+     <label>Apellidos</label>
+     <input type="text" id="last_name" name="last_name" value="{{e_user.last_name}}" class="form-control col-lg-3" required>
+     <label>Activo</label>
+     <div class="input-group mb-3  ">
+          <div class="input-group-prepend">
+               <div class="input-group-text">
+                    <input type="checkbox" id="is_active" name="is_active" {% if e_user.is_active %}checked{% endif %}>
+               </div>
+          </div>
+     </div>
+
+     <button type="submit" class="btn btn-primary ">Actualizar</button>
+</form>
+{% endblock %}
